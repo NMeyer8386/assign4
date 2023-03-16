@@ -56,6 +56,11 @@ export default class SoundButton extends Component {
         <RecordButton/>
         </View>
 
+        <View style={styles.hContainer}>
+        <RecordButton/>
+        <RecordButton/>
+        </View>
+
       </View>
     );
   }
