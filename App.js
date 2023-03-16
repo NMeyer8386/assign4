@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View, VirtualizedList } from 'react-native';
 import { Audio } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 Audio.setAudioModeAsync({
   playsInSilentModeIOS: true,
@@ -10,7 +12,9 @@ Audio.setAudioModeAsync({
 
 let imgSource = require('./assets/audio-record-icon-1.png');
 
-export default class SoundButton extends Component {
+const Tab = createBottomTabNavigator();
+
+export default class SoundBoard extends Component {
 
   /*
                         Ideas for Assign4:
@@ -22,6 +26,27 @@ export default class SoundButton extends Component {
     Load sounds on ComponentDidMount(), use example from expo/sounds/
   to configure hold to record, press to play.
   */
+
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+  }
+
+  render() {
+    return (
+        <NavigationContainer>
+          <Tab.Navigator>
+            <Tab.Screen name="SoundScreen" component={SoundPage}/>
+            <Tab.Screen name="RecordScreen" component={RecordPage}/>
+          </Tab.Navigator>
+        </NavigationContainer>
+    );
+  }
+}
+
+class SoundPage extends Component {
 
   constructor(props) {
     super(props);
@@ -49,16 +74,6 @@ export default class SoundButton extends Component {
         <View style={styles.hContainer}>
         <Funnybutton name={'Extremely Loud Incorrect Buzzer Noise'} soundFile={require('./assets/sfx/incorrect-buzzer.mp3')}/>
         <Funnybutton name={'HEHEHEHA'} soundFile={require('./assets/sfx/heheheha.mp3')}/>
-        </View>
-
-        <View style={styles.hContainer}>
-        <RecordButton/>
-        <RecordButton/>
-        </View>
-
-        <View style={styles.hContainer}>
-        <RecordButton/>
-        <RecordButton/>
         </View>
 
       </View>
@@ -113,6 +128,34 @@ class Funnybutton extends Component {
     </TouchableOpacity>
     </View>
     )
+  }
+}
+
+class RecordPage extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+
+        <View style={styles.hContainer}>
+        <RecordButton/>
+        <RecordButton/>
+        </View>
+
+        <View style={styles.hContainer}>
+        <RecordButton/>
+        <RecordButton/>
+        </View>
+
+      </View>
+    );
   }
 }
 
