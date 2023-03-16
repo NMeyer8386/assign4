@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 Audio.setAudioModeAsync({
   playsInSilentModeIOS: true,
-  allowsRecordingIOS: true,
+  allowsRecordingIOS: false,
 });
 
 let imgSource = require('./assets/audio-record-icon-1.png');
@@ -52,8 +52,8 @@ export default class SoundButton extends Component {
         </View>
 
         <View style={styles.hContainer}>
-        <RecordButton soundFile={'./assets/sfx/default.mp3'}/>
-        <RecordButton soundFile={'./assets/sfx/default.mp3'}/>
+        <RecordButton/>
+        <RecordButton/>
         </View>
 
       </View>
@@ -101,7 +101,7 @@ class Funnybutton extends Component {
       <View style={styles.container}>
       <TouchableOpacity onPress={this.playLocalSound}>
       <View style={styles.buttonParent}>
-        <LinearGradient colors={['#EE0000', '#FF8800']} style={styles.buttonGrad}>
+        <LinearGradient colors={['#19e312', '#12e396']} style={styles.buttonGrad}>
           <Text style={styles.buttonText}>{this.props.name}</Text>
         </LinearGradient>
       </View>
@@ -136,17 +136,7 @@ class RecordButton extends Component {
     }
   
     async componentDidMount() {
-      if (this.state.recordedSound != null){
-        const { sound } = await Audio.Sound.createAsync(
-          this.state.recordedSound,
-        );
-      } else {
-        const { sound } = await Audio.Sound.createAsync(
-          this.props.soundFile,
-        );
-      }
-      
-      this.setLocalSound(sound);
+
     }
   
     async componentWillUnmount() {
@@ -159,12 +149,20 @@ class RecordButton extends Component {
   
     playLocalSound = async () => {
       const { localSound } = this.state;
-      await localSound.replayAsync();
+      try{      
+        await localSound.replayAsync();
+      } catch(error){
+        console.log("Error: ", error)
+      }
+
     }
 
     startRecording = async () => {
       try {
         await Audio.requestPermissionsAsync();
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: true,
+        });
   
         const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
   
@@ -179,6 +177,9 @@ class RecordButton extends Component {
       const { recording } = this.state;
       console.log('Stopping Recording...');
       await recording.stopAndUnloadAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+      });
       const uri = recording.getURI();
       this.setState({
         recording: undefined,
@@ -195,13 +196,15 @@ class RecordButton extends Component {
 
   render() {
     return(
+      <View style={styles.container}>
       <TouchableOpacity onLongPress={this.startRecording} onPressOut={this.state.recording ? this.stopRecording : this.playLocalSound} onPress={this.playLocalSound}>
       <View style={styles.buttonParent}>
-        <LinearGradient colors={['#EE0000', '#FF8800']} style={styles.buttonGrad}>
-          <Text>{this.state.recording ? "Stop Recording!" : "Start Recording!"}</Text>
+        <LinearGradient colors={this.state.recording ? ['#e31212', '#e31212'] : ['#EE0000', '#FF8800']} style={styles.buttonGrad}>
+          <Text style={styles.buttonText}>{this.state.localSound ? "Press to Play!" : "Hold to Record!"}</Text>
         </LinearGradient>
       </View>
     </TouchableOpacity>
+    </View>
     ) 
   }
 }
