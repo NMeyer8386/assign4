@@ -4,6 +4,7 @@ import { Audio } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+// Icons from Ion Icons
 
 Audio.setAudioModeAsync({
   playsInSilentModeIOS: true,
