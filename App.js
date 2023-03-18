@@ -4,6 +4,7 @@ import { Audio } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from '@expo/vector-icons/Ionicons';
 // Icons from Ion Icons
 
 Audio.setAudioModeAsync({
@@ -38,9 +39,28 @@ export default class SoundBoard extends Component {
   render() {
     return (
         <NavigationContainer>
-          <Tab.Navigator>
-            <Tab.Screen name="SoundScreen" component={SoundPage}/>
-            <Tab.Screen name="RecordScreen" component={RecordPage}/>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+
+                if (route.name === 'Sounds') {
+                  iconName = focused
+                  ? 'megaphone'
+                  : 'megaphone-outline'
+                }
+                else if (route.name === 'Record') {
+                  iconName = focused
+                  ? 'mic'
+                  : 'mic-outline'
+                }
+                return <Ionicons name={iconName} size={size} color={color}/>
+              },
+              tabBarActiveTintColor: 'limegreen',
+              tabBarInactiveTintColor: 'gray',
+            })}>
+            <Tab.Screen name="Sounds" component={SoundPage}/>
+            <Tab.Screen name="Record" component={RecordPage}/>
           </Tab.Navigator>
         </NavigationContainer>
     );
