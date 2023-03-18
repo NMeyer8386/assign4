@@ -134,7 +134,7 @@ class Funnybutton extends Component {
   
     playLocalSound = async () => {
       const { localSound } = this.state;
-      await localSound.replayAsync();
+      await localSound.playAsync();
     }
 
   render() {
